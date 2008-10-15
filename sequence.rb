@@ -1,28 +1,6 @@
 require 'file_formats'
-
-module Nucleotide
-  def complement
-    result = ""
-    self.each do |nucleotide|
-      result << 'T' if nucleotide == 'a'
-      result << 'A' if nucleotide == 't'
-      result << 'C' if nucleotide == 'g'
-      result << 'G' if nucleotide == 'c'
-      
-      result << 'T' if nucleotide == 'A'
-      result << 'A' if nucleotide == 'T'
-      result << 'C' if nucleotide == 'C'
-      result << 'G' if nucleotide == 'G' 
-    end
-    return result
-  end
-end
-
-class String 
-  include Nucleotide
-end
-
-class Sequence
+require 'nucleotide'
+class Sequence 
   include Enumerable
   
   def initialize(*args)
@@ -31,7 +9,7 @@ class Sequence
       if args[0].class == Array 
         @sequence = args[0]
       elsif args[0].class == String
-        @sequence = args[0].split
+        @sequence = args[0].split ''
       else
         throw Exception.new "Sequence should be initialized from a string or array if only 1 argument is used"
       end
@@ -54,5 +32,15 @@ class Sequence
   
   def to_s
     @sequence.join
+  end
+  
+  def n_mers(n)
+    n_mers = {}
+    0.upto(@sequence.length - n) do |i|
+      puts i
+      n_mers[@sequence[i,n]] ||= []
+      n_mers[@sequence[i,n]] << i
+    end
+    return n_mers
   end
 end
