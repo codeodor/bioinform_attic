@@ -47,7 +47,6 @@ class Reads
       if !sequence_n_mers[key]
         # fake the numbers so we can return Reads object until we get better API
         fake_array = []
-        puts "result key: " << result[key]
         1.upto(result[key]) do |i|
           fake_array << 1
         end
@@ -55,10 +54,11 @@ class Reads
       end
     end
     
-    return Reads.new result, @n
+    return Reads.new(result, @n)
   end
   
   def discard_if_present_in!(sequence)
     @n_mers = discard_if_present_in sequence
+    return self
   end
 end
