@@ -37,7 +37,6 @@ class Sequence
   def n_mers(n)
     n_mers = {}
     0.upto(@sequence.length - n) do |i|
-      puts i
       n_mers[@sequence[i,n]] ||= []
       n_mers[@sequence[i,n]] << i
     end
