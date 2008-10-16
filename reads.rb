@@ -29,9 +29,13 @@ class Reads
     PP.pp @n_mers
   end
   
-  def map_to(sequence)
-    throw Exception.new "Holy Guacamole! This method is yet to be implemented! Eh!?"
-    sequence_nmer_positions = ""
+  def map_to(sequence) # need one to map if w/in certain # of MM
+    sequence_n_mer_positions = sequence.n_mers(@n)
+    mapping = {}
+    @n_mers.each_key do |key|
+      mapping[key] = sequence_n_mer_positions[key] if sequence_n_mer_positions[key]
+    end
+    return mapping
   end
   
   def discard_if_present_in(sequence) #need one to discard if w/in certain # of mismatches
