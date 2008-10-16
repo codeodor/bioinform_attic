@@ -65,4 +65,10 @@ class Reads
     @n_mers = discard_if_present_in sequence
     return self
   end
+  
+  #testing by #MM: break ASAP. Test difference betwwen has and has not. 
+  #0=0MM, -1, -2. 4, etc = off by 1. any combo of 2 is off by 2, ... and so on?
+  # 1MM will be off by a power of 2
+  # 2MM will be off by a power or 2 + another power of 2
+  # etc (assuming we go the # route for nucleotides)
 end
