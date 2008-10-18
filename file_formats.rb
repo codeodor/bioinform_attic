@@ -25,6 +25,23 @@ class FileFormats
     end
     return name, sequence_string
   end
-
+  
+  def self.fasta_to_old(fasta_filename, old_filename)
+    description_line = ""
+    sequence_line = ""
+    File.open(fasta_filename) do |file|
+      line_count = 0
+      file.each_line do |line|
+        line_count += 1 
+        description_line = line if line_count == 1
+        sequence_line << line.gsub(/\s/, "") if line_count > 1
+      end
+    end
+    
+    File.open(old_filename, 'w') do |file|
+      file.write(description_line << "\n\n\n" << sequence_line)
+    end
+  end
+  
 end
 #FileFormats.old_to_fasta("../potato/potato_ref_seqs/NC_007943.txt", "NC.fasta")
