@@ -14,7 +14,12 @@ class NCBI
   end
 
   def self.generic_blast(program, sequence, database="nr", wait=3)
-    http_response = Net::HTTP.get(URI.parse("http://www.ncbi.nlm.nih.gov/blast/Blast.cgi?CMD=Put&QUERY=#{sequence}&DATABASE=#{database}&PROGRAM=#{program}"))
+    use_megablast = "no"
+    if program.downcase == 'megablast'
+      use_megablast = "yes"
+      program = "blastn"
+    end
+    http_response = Net::HTTP.get(URI.parse("http://www.ncbi.nlm.nih.gov/blast/Blast.cgi?CMD=Put&QUERY=#{sequence}&DATABASE=#{database}&PROGRAM=#{program}&MEGABLAST=#{use_megablast}"))
     params = blast_results_params(http_response)
     request_id = params[:RID]
     estimated_time_of_execution = params[:RTOE].to_i
