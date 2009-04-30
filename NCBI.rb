@@ -13,8 +13,8 @@ class NCBI
     return as_fasta
   end
 
-  def self.blastx(sequence, database="nr", wait=3)
-    http_response = Net::HTTP.get(URI.parse("http://www.ncbi.nlm.nih.gov/blast/Blast.cgi?CMD=Put&QUERY=#{sequence}&DATABASE=#{database}&PROGRAM=blastx"))
+  def self.generic_blast(program, sequence, database="nr", wait=3)
+    http_response = Net::HTTP.get(URI.parse("http://www.ncbi.nlm.nih.gov/blast/Blast.cgi?CMD=Put&QUERY=#{sequence}&DATABASE=#{database}&PROGRAM=#{program}"))
     params = blast_results_params(http_response)
     request_id = params[:RID]
     estimated_time_of_execution = params[:RTOE].to_i
@@ -24,7 +24,19 @@ class NCBI
       estimated_time_of_execution = wait
       http_response = Net::HTTP.get(URI.parse("http://www.ncbi.nlm.nih.gov/blast/Blast.cgi?RID=#{request_id}&CMD=Get"))
     end
-    return convert_to_local(http_response)  
+    return convert_to_local(http_response)
+  end
+
+  def self.blastx(sequence, database="nr", wait=3)
+    return generic_blast("blastx", sequence, database, wait)
+  end
+  
+  def self.megablast(sequence, database="nr", wait=3)
+    return generic_blast("blastx", sequence, database, wait)
+  end
+  
+  def self.blastn(sequence, database="nr", wait=3)
+    return generic_blast("blastx", sequence, database, wait)
   end
   
   def self.blastx_textified(sequence, database="nr", wait=3)
